@@ -62,18 +62,19 @@ jobs:
           
           # 將上面定義的環境變數傳遞給 Cloud Run 服務執行時使用
           env_vars: |
-            ENV: ${{ env.ENV }}
-            GCP_SQL_SERVER: ${{ env.GCP_SQL_SERVER }}
-            GCP_SQL_DATABASE: ${{ env.GCP_SQL_DATABASE }}
-            GCP_SQL_USERNAME: ${{ env.GCP_SQL_USERNAME }}
-            GCP_SQL_PASSWORD: ${{ env.GCP_SQL_PASSWORD }}
-            GOOGLE_API_KEY: ${{ env.GOOGLE_API_KEY }}
-            GEMINI_GENERATIVE_MODEL: ${{ env.GEMINI_GENERATIVE_MODEL }}
-            GEMINI_EMBEDDING_MODEL: ${{ env.GEMINI_EMBEDDING_MODEL }}
-            ODBC_DRIVER: ${{ env.ODBC_DRIVER }}
-            QDRANT_URL: ${{ env.QDRANT_URL }}
-            QDRANT_API_KEY: ${{ env.QDRANT_API_KEY }}
-            # 新增這個 secrets 區塊來掛載 Secret Manager 中的密鑰
-          secrets:
-          # 格式為: [要顯示的環境變數名稱]=[GCP Secret 名稱]:[版本]
-          MONGO_CONNECTION_STRING: mongo-connection-string:latest
+            ENV=${{ env.ENV }}
+            GCP_SQL_SERVER=${{ secrets.GCP_SQL_SERVER }}
+            GCP_SQL_DATABASE=${{ secrets.GCP_SQL_DATABASE }}
+            GCP_SQL_USERNAME=${{ secrets.GCP_SQL_USERNAME }}
+            GCP_SQL_PASSWORD=${{ secrets.GCP_SQL_PASSWORD }}
+            GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}
+            GEMINI_GENERATIVE_MODEL=${{ secrets.GEMINI_GENERATIVE_MODEL }}
+            GEMINI_EMBEDDING_MODEL=${{ secrets.GEMINI_EMBEDDING_MODEL }}
+            ODBC_DRIVER=${{ secrets.ODBC_DRIVER }}
+            QDRANT_URL=${{ secrets.QDRANT_URL }}
+            QDRANT_API_KEY=${{ secrets.QDRANT_API_KEY }}
+
+            # 參數二：secrets
+            # 這是和 env_vars 同一層級、完全獨立的參數
+          secrets: |
+            MONGO_CONNECTION_STRING=mongo-connection-string:latest
