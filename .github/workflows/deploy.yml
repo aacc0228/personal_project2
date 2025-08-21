@@ -10,7 +10,7 @@ on:
 # 環境變數：在此定義整個工作流程中會用到的變數
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }} # Google Cloud 專案 ID
-  SERVICE_NAME: personal-project             # 您在 Cloud Run 上的服務名稱
+  SERVICE_NAME: personal-project2             # 您在 Cloud Run 上的服務名稱
   REGION: asia-east1                        # 您服務所在的區域
   # --- 資料庫環境變數 ---
   GCP_SQL_SERVER: ${{ secrets.GCP_SQL_SERVER }}
