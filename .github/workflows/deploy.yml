@@ -22,7 +22,6 @@ env:
   GEMINI_GENERATIVE_MODEL: ${{ secrets.GEMINI_GENERATIVE_MODEL }}
   GEMINI_EMBEDDING_MODEL: ${{ secrets.GEMINI_EMBEDDING_MODEL }}
   ODBC_DRIVER: ${{ secrets.ODBC_DRIVER }}
-  MONGO_CONNECTION_STRING: ${{ secrets.MONGO_CONNECTION_STRING }}
   QDRANT_URL: ${{ secrets.QDRANT_URL }}
   QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
 
@@ -76,5 +75,5 @@ jobs:
             QDRANT_API_KEY: ${{ env.QDRANT_API_KEY }}
             # 新增這個 secrets 區塊來掛載 Secret Manager 中的密鑰
           secrets:
-            # 格式為: [要顯示的環境變數名稱]=[GCP Secret 名稱]:[版本]
-            MONGO_CONNECTION_STRING: mongo-connection-string:latest
+          # 格式為: [要顯示的環境變數名稱]=[GCP Secret 名稱]:[版本]
+          MONGO_CONNECTION_STRING: mongo-connection-string:latest
