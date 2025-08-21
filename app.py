@@ -13,24 +13,26 @@ import google.generativeai as genai
 import traceback
 
 # --- 0. 從 .env 檔案載入環境變數 ---
-load_dotenv()
+if os.environ.get('ENV') != 'production':
+    print("Running in development mode, loading .env file.")
+    load_dotenv()
 
 # --- 1. 從環境變數讀取 Google Gemini 設定 ---
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-GEMINI_GENERATIVE_MODEL_NAME = os.getenv("GEMINI_GENERATIVE_MODEL", "gemini-2.5-flash")
-GEMINI_EMBEDDING_MODEL_NAME = os.getenv("GEMINI_EMBEDDING_MODEL", "models/text-embedding-004")
+GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
+GEMINI_GENERATIVE_MODEL_NAME = os.environ.get("GEMINI_GENERATIVE_MODEL", "gemini-2.5-flash")
+GEMINI_EMBEDDING_MODEL_NAME = os.environ.get("GEMINI_EMBEDDING_MODEL", "models/text-embedding-004")
 
 # --- 2. 從環境變數讀取 GCP SQL Server 設定 (已修改) ---
-GCP_SQL_SERVER = os.getenv("GCP_SQL_SERVER")
-GCP_SQL_DATABASE = os.getenv("GCP_SQL_DATABASE")
-GCP_SQL_USERNAME = os.getenv("GCP_SQL_USERNAME")
-GCP_SQL_PASSWORD = os.getenv("GCP_SQL_PASSWORD")
-ODBC_DRIVER = os.getenv("ODBC_DRIVER", '{ODBC Driver 18 for SQL Server}')
+GCP_SQL_SERVER = os.environ.get("GCP_SQL_SERVER")
+GCP_SQL_DATABASE = os.environ.get("GCP_SQL_DATABASE")
+GCP_SQL_USERNAME = os.environ.get("GCP_SQL_USERNAME")
+GCP_SQL_PASSWORD = os.environ.get("GCP_SQL_PASSWORD")
+ODBC_DRIVER = os.environ.get("ODBC_DRIVER", '{ODBC Driver 18 for SQL Server}')
 
 # --- 3. 從環境變數讀取 MongoDB 設定 (已修改) ---
-MONGO_CONNECTION_STRING = os.getenv("MONGO_CONNECTION_STRING")
-MONGO_DATABASE_NAME = os.getenv("MONGO_DATABASE_NAME", "ITKnowledgeBase")
-MONGO_COLLECTION_NAME = os.getenv("MONGO_COLLECTION_NAME", "Queries")
+MONGO_CONNECTION_STRING = os.environ.get("MONGO_CONNECTION_STRING")
+MONGO_DATABASE_NAME = os.environ.get("MONGO_DATABASE_NAME", "ITKnowledgeBase")
+MONGO_COLLECTION_NAME = os.environ.get("MONGO_COLLECTION_NAME", "Queries")
 
 # --- 初始化 MongoDB Client (已修改並加入 certifi) ---
 import certifi  # <--- 1. 匯入 certifi
@@ -68,8 +70,8 @@ else:
         is_mongodb_configured = False
 
 # --- 4. 從環境變數讀取 Qdrant 設定 ---
-QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
-QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+QDRANT_URL = os.environ.get("QDRANT_URL", "http://localhost:6333")
+QDRANT_API_KEY = os.environ.get("QDRANT_API_KEY")
 QDRANT_COLLECTION_NAME = "factory_manuals"
 
 
