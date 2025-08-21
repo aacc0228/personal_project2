@@ -1,0 +1,9 @@
+flask
+python-dotenv
+pyodbc
+openai
+pandas
+qdrant-client
+google-generativeai
+pymongo
+certifi

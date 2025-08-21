@@ -1,0 +1,75 @@
+# 工作流程名稱
+name: Deploy to Google Cloud Run
+
+# 觸發條件：當推送到 main 分支時執行
+on:
+  push:
+    branches:
+      - main
+
+# 環境變數：在此定義整個工作流程中會用到的變數
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }} # Google Cloud 專案 ID
+  SERVICE_NAME: personal-project             # 您在 Cloud Run 上的服務名稱
+  REGION: asia-east1                        # 您服務所在的區域
+  # --- 資料庫環境變數 ---
+  GCP_SQL_SERVER: ${{ secrets.GCP_SQL_SERVER }}
+  GCP_SQL_DATABASE: ${{ secrets.GCP_SQL_DATABASE }}
+  GCP_SQL_USERNAME: ${{ secrets.GCP_SQL_USERNAME }}
+  GCP_SQL_PASSWORD: ${{ secrets.GCP_SQL_PASSWORD }}
+  GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+  GEMINI_GENERATIVE_MODEL: ${{ secrets.GEMINI_GENERATIVE_MODEL }}
+  GEMINI_EMBEDDING_MODEL: ${{ secrets.GEMINI_EMBEDDING_MODEL }}
+  ODBC_DRIVER: ${{ secrets.ODBC_DRIVER }}
+  MONGO_CONNECTION_STRING: ${{ secrets.MONGO_CONNECTION_STRING }}
+  QDRANT_URL: ${{ secrets.QDRANT_URL }}
+  QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
+
+# 定義工作 (Jobs)
+jobs:
+  deploy:
+    name: Build and Deploy to Cloud Run
+    # 使用最新版的 Ubuntu 作為執行環境
+    runs-on: ubuntu-latest
+
+    # 工作中的各個步驟 (Steps)
+    steps:
+      # 步驟 1: 從您的 GitHub 倉庫中拉取最新的程式碼
+      # 這樣後續步驟才能存取到 Dockerfile 和其他專案檔案
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 步驟 2: 進行 Google Cloud 身份驗證
+      # 使用您儲存在 GitHub Secrets 中的服務帳戶金鑰 (SA_KEY) 來登入
+      - name: Authenticate to Google Cloud
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      # 步驟 3: 建置映像檔並部署到 Cloud Run
+      # 這是整個流程的核心
+      - name: Deploy to Cloud Run
+        uses: 'google-github-actions/deploy-cloudrun@v2'
+        with:
+          # 指定要部署的服務名稱
+          service: ${{ env.SERVICE_NAME }}
+          # 指定服務所在的區域
+          region: ${{ env.REGION }}
+          
+          # 關鍵設定：告訴 Cloud Run 從當前目錄的原始碼來建置映像檔。
+          # 它會自動尋找並使用您專案根目錄下的 Dockerfile。
+          source: '.'
+          
+          # 將上面定義的環境變數傳遞給 Cloud Run 服務執行時使用
+          env_vars: |
+            GCP_SQL_SERVER: ${{ secrets.GCP_SQL_SERVER }}
+            GCP_SQL_DATABASE: ${{ secrets.GCP_SQL_DATABASE }}
+            GCP_SQL_USERNAME: ${{ secrets.GCP_SQL_USERNAME }}
+            GCP_SQL_PASSWORD: ${{ secrets.GCP_SQL_PASSWORD }}
+            GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+            GEMINI_GENERATIVE_MODEL: ${{ secrets.GEMINI_GENERATIVE_MODEL }}
+            GEMINI_EMBEDDING_MODEL: ${{ secrets.GEMINI_EMBEDDING_MODEL }}
+            ODBC_DRIVER: ${{ secrets.ODBC_DRIVER }}
+            MONGO_CONNECTION_STRING: ${{ secrets.MONGO_CONNECTION_STRING }}
+            QDRANT_URL: ${{ secrets.QDRANT_URL }}
+            QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
