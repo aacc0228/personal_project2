@@ -74,3 +74,4 @@ jobs:
             MONGO_CONNECTION_STRING: ${{ env.MONGO_CONNECTION_STRING }}
             QDRANT_URL: ${{ env.QDRANT_URL }}
             QDRANT_API_KEY: ${{ env.QDRANT_API_KEY }}
+            ENV: ${{ env.ENV }}
