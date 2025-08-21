@@ -12,10 +12,10 @@ from qdrant_client import QdrantClient
 import google.generativeai as genai
 import traceback
 
-# --- 0. 從 .env 檔案載入環境變數 ---
-if os.environ.get('ENV') != 'production':
-    print("Running in development mode, loading .env file.")
-    load_dotenv()
+# # --- 0. 從 .env 檔案載入環境變數 ---
+# if os.environ.get("ENV") != 'production':
+#     print("Running in development mode, loading .env file.")
+#     load_dotenv()
 
 # --- 1. 從環境變數讀取 Google Gemini 設定 ---
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
